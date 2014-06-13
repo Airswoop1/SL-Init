@@ -1,0 +1,28 @@
+<!-- form-profile.html -->
+<div class="form-group">
+    <label for="mailing_address">Mailing Street Address</label>
+    <input type="text" class="form-control" name="mailing_address" ng-model="formData.mailing_address.street_address">
+</div>
+
+<div class="form-group">
+    <label for="mailing_apt_number">Apt #</label>
+    <input type="text" class="form-control" name="mailing_apt_number" ng-model="formData.mailing_address.apt_number">
+</div>
+
+<div class="form-group">
+    <label for="mailing_city">City</label>
+    <input type="text" class="form-control" name="mailing_city" ng-model="formData.mailing_address.city">
+</div>
+
+<div class="form-group">
+    <label for="mailing_zip">Zip Code</label>
+    <input type="text" class="form-control" name="mailing_zip" ng-model="formData.mailing_address.zip">
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-6 col-xs-offset-3">
+        <a ui-sref="form.personal-info" class="btn btn-block btn-info">
+            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </a>
+    </div>
+</div>

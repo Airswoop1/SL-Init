@@ -1,0 +1,71 @@
+{
+    "lw_disabled": "false",
+    "lw_vet": "false",
+    "other_residents": [
+        {
+            "name": {
+                "first_name": "Tiernan",
+                "middle_name": "Olsen",
+                "last_name": "Kiefer"
+            },
+            "SSN": "0987654321",
+            "DOB": "1989-04-06",
+            "marital_status": "Single",
+            "gender": "Female",
+            "hispanic": "No"
+        },
+        {
+            "name": {
+                "first_name": "Jamie",
+                "middle_name": "Sarah",
+                "last_name": "Miller"
+            },
+            "SSN": "1111111111",
+            "DOB": "1990-12-11",
+            "marital_status": "Single",
+            "gender": "Female",
+            "hispanic": "No"
+        }
+    ],
+    "res_non_citizens": [],
+    "income_sources": [
+        {
+            "frequency": "Bi-weekly",
+            "name": "Kevin Miller",
+            "source": "Significance Labs",
+            "hours": 120,
+            "amount": 1500
+        },
+        {
+            "frequency": "Bi-weekly",
+            "name": "Tiernan Kiefer",
+            "source": "Associate at Kara Ross",
+            "hours": 200,
+            "amount": 2000
+        },
+        {
+            "frequency": "Bi-weekly",
+            "name": "Jamie Miller",
+            "source": "Client Services at Yext",
+            "hours": 300,
+            "amount": 3000
+        }
+    ],
+    "name": {
+        "first_name": "Kevin",
+        "middle_name": "Andrew",
+        "last_name": "Miller"
+    },
+    "phone_main": "2016551789",
+    "address": {
+        "street_address": "4118 Crescent St",
+        "apt_number": "4B",
+        "city": "Long Island City",
+        "zip": "11101"
+    },
+    "SSN": "123456789",
+    "DOB": "1988-11-29",
+    "marital_status": "Single",
+    "gender": "Male",
+    "hispanic": "No"
+}

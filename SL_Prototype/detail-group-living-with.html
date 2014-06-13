@@ -1,0 +1,47 @@
+<!-- form.detail-group-living-with.html -->
+<h4 class="text-center">Who you're living with</h4>
+<div class="form-group">
+    <label>Are you or is anyone living with you blind, disabled or pregnant? </label>
+    <label class="radio-inline">
+        <input type="radio" name="lw_disabled" value="true" ng-model="formData.lw_disabled"/> Yes
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="lw_disabled" value="false" ng-model="formData.lw_disabled"/> No
+    </label>
+    <br/>
+
+    <div>
+        <label for="lw_disabled_yes">If yes, who:</label>
+        <input class="form-control" name="lw_disabled_yes" type="text"/>
+    </div>
+</div>
+<br/>
+
+<div class="form-group">
+    <label for="lw_vet">Are you or is anyone living with you a veteran?</label>
+    <label class="radio-inline">
+        <input type="radio" name="lw_vet" value="true" ng-model="formData.lw_vet"/> Yes
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="lw_vet" value="false" ng-model="formData.lw_vet"/> No
+    </label>
+    <br/>
+    <div class="input-group">
+        <span class="input-group-addon" style="background-color:lightgray; color:black">If Yes, Who:</span>
+        <input type="text" name="lw_vet_yes" class="form-control" placeholder="John Doe">
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-xs-6">
+        <a ui-sref="form.personal-info" class="btn btn-block btn-info">
+            Go Back
+        </a>
+    </div>
+    <div class="col-xs-6">
+        <a ui-sref="form.personal-info" class="btn btn-block btn-success">
+            Continue
+        </a>
+    </div>
+</div>
