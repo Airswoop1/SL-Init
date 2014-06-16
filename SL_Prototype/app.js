@@ -116,7 +116,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
 
 // our controller for the form
 // =============================================================================
-    .controller('formController', function($scope, $state) {
+    .controller('formController', function($scope, $state, $http) {
 
         // we will store all of our form data in this object
         $scope.formData = {
@@ -164,8 +164,29 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         }
 
         // function to process the form
-        $scope.processForm = function() {
-            alert('awesome!');
+        $scope.processBasicForm = function() {
+            alert('processing form');
+            console.log($http.defaults.headers.post);
+            $http.post('http://localhost:8080/create_base_pdf', JSON.stringify($scope.formData))
+                .success(function(data, status, headers, config) {
+
+                    alert("successfully received success callback");
+                    console.log(status);
+                    console.log(data);
+                    console.log(headers);
+                    console.log(config);
+
+                    $state.go('form.personal-info');
+                })
+                .error(function(data, status, headers, config) {
+
+                    alert("successfully received error callback");
+                    console.log(status);
+                    console.log(data);
+                    console.log(headers);
+                    console.log(config);
+
+                });
         };
 
     })
