@@ -21,19 +21,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         }
     })
 
-    /*.directive('ssn', function()
-     {
-     return {
-     restrict: 'A',
-     replace: true,
-     require:'ngModel',
-     scope: {
-     ssn: '=ssn'
-     },
-     templateUrl: 'ssn-container.html'
-     }
-     })*/
-
 // configuring our routes
 // =============================================================================
     .config(function($stateProvider, $urlRouterProvider) {
@@ -163,11 +150,13 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
             this.resident_non_citizen = true;
         }
 
+
+
         // function to process the form
         $scope.processBasicForm = function() {
             alert('processing form');
             console.log($http.defaults.headers.post);
-            $http.post('http://localhost:8080/create_base_pdf', JSON.stringify($scope.formData))
+            $http.post('http://snapcoach.azurewebsites.net/create_base_pdf', JSON.stringify($scope.formData))
                 .success(function(data, status, headers, config) {
 
                     alert("successfully received success callback");
@@ -190,3 +179,4 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         };
 
     })
+
