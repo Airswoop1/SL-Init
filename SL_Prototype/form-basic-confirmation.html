@@ -1,0 +1,32 @@
+<div class="row">
+    <p>Please confirm the information you entered is correct:</p>
+    <div>
+        <label for="name">Name: </label>
+        <span id="name">{{ formData.name.first_name + " " + formData.name.last_name }} </span>
+    </div>
+
+    <div>
+        <label for="telephone">Telephone: </label>
+        <span id="telephone">{{ formData.phone_main || "None. Note that if you do not enter a phone number you will be required to have an interview at the Human Resources Office." }}</span>
+    </div>
+
+    <div>
+        <label for="address">Address: </label>
+        <span id="address">{{ formData.address.street_address + ", " + formData.address.apt_number + ", " + formData.address.zip }} </span>
+    </div>
+</div>
+
+<div style="border-top:1px solid dimgray">
+    <h5><b>Certification:</b></h5>
+    <span name="legal_disclaimer">I swear and/or affirm under the penalties of perjury that the information I have given or will give to the local Social Services district is correct.</span>
+    <div>
+        <label for="agree_to_legal">
+            <input type="checkbox" id="agree_to_legal" ng-model="basic_confirmation_agree"/> I Agree
+        </label>
+    </div>
+    <div class="col-xs-6 col-xs-offset-3" ng-show="basic_confirmation_agree">
+        <a ui-sref="form.living-with" class="btn btn-block btn-info">
+            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </a>
+    </div>
+</div>

@@ -57,6 +57,11 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                 templateUrl: 'form-address.html'
             })
 
+            .state('form.basic-confirmation', {
+                url: '/basic-confirmation',
+                templateUrl: 'form-basic-confirmation.html'
+            })
+
             .state('form.mailing-address',{
                 url: '/mailing-address',
                 templateUrl: 'form-mailing-address.html'
@@ -109,6 +114,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         $scope.formData = {
             lw_disabled:"false",
             lw_vet:"false",
+            name: {},
             other_residents: [],
             res_non_citizens : [],
             income_sources : []
@@ -124,6 +130,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         //data flags for optional fields
         $scope.alt_phone = false;
         $scope.resident_non_citizen = false;
+        $scope.basic_confirmation_agree = false;
 
 
         $scope.addIncome = function(next){
@@ -140,17 +147,30 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
             return true;
         }
 
-        $scope.addResident = function(){
+        $scope.addResident = function() {
             this.formData.other_residents.push(this.new_resident); //add user to other_residents
             this.new_resident = {}; //clear form data
 
         }
 
-        $scope.nonCitizens = function(){
+        $scope.nonCitizens = function() {
             this.resident_non_citizen = true;
         }
 
 
+        $scope.completedBasicInfo = function() {
+            if(this.formData.name.first_name && this.formData.name.last_name) {
+                $state.go('form.address');
+            }
+            else {
+             this.throwErrors('form.basic-info')
+            }
+        }
+
+
+        $scope.throwErrors = function(page) {
+            alert('you must fill out all required fields!');
+        }
 
         // function to process the form
         $scope.processBasicForm = function() {
