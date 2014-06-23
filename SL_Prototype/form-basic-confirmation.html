@@ -1,32 +1,58 @@
-<div class="row">
-    <p>Please confirm the information you entered is correct:</p>
-    <div>
-        <label for="name">Name: </label>
-        <span id="name">{{ formData.name.first_name + " " + formData.name.last_name }} </span>
-    </div>
-
-    <div>
-        <label for="telephone">Telephone: </label>
-        <span id="telephone">{{ formData.phone_main || "None. Note that if you do not enter a phone number you will be required to have an interview at the Human Resources Office." }}</span>
-    </div>
-
-    <div>
-        <label for="address">Address: </label>
-        <span id="address">{{ formData.address.street_address + ", " + formData.address.apt_number + ", " + formData.address.zip }} </span>
-    </div>
+<div class="row ">
+    <span class="text-left" style="font-size: 30px"><strong>Great! You're almost done!</strong></span>
 </div>
 
-<div style="border-top:1px solid dimgray">
-    <h5><b>Certification:</b></h5>
-    <span name="legal_disclaimer">I swear and/or affirm under the penalties of perjury that the information I have given or will give to the local Social Services district is correct.</span>
-    <div>
-        <label for="agree_to_legal">
-            <input type="checkbox" id="agree_to_legal" ng-model="basic_confirmation_agree"/> I Agree
-        </label>
+<div class="row ">
+    <p>
+        Once you submit your name and contact information, we'll confirm that SNAP has received it.
+    </p>
+</div>
+
+<div class="row ">
+
+    <div class="col-xs-12">
+        <p id="name">{{ formData.name.first_name + " " + formData.name.last_name }} </p>
+        <div >
+            <a ui-sref="form.intro" class="btn btn-block" style="background-color:#e8e8e8;color:black">
+                Edit name
+            </a>
+        </div>
+        <br/>
     </div>
-    <div class="col-xs-6 col-xs-offset-3" ng-show="basic_confirmation_agree">
-        <a ui-sref="form.living-with" class="btn btn-block btn-info">
-            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
-        </a>
+
+
+    <div class="col-xs-12">
+        <p id="address">{{ formData.address.street_address + " " + formData.address.apt_number + ", " + formData.address.zip }} </p>
+        <div >
+            <a ui-sref="form.address" class="btn btn-block" style="background-color:#e8e8e8;color:black">
+                Edit address
+            </a>
+        </div>
+        <br/>
     </div>
+
+
+    <div class="col-xs-12">
+        <p id="telephone">{{ (formData.phone_main | tel)}}</p>
+        <div>
+            <a ui-sref="form.telephone" class="btn btn-block" style="background-color:#e8e8e8;color:black">
+                Edit phone number
+            </a>
+        </div>
+    </div>
+    <br/>
+
+</div>
+
+
+<div class="row">
+    <br/>
+    <label for="agree_to_legal">
+        <input type="checkbox" id="agree_to_legal"  ng-model="basic_confirmation_agree"/> I certify that the information I am submitting is true.
+    </label>
+</div>
+<div class="col-xs-12" ng-show="basic_confirmation_agree">
+    <a ng-click="submitBasicApp()" class="btn btn-block btn-remove-ws" style="background-color: yellow;color:black">
+        Submit Application
+    </a>
 </div>

@@ -4,8 +4,8 @@
 
         <div id="form-container">
 
-            <div class="page-header text-center">
-                <h2>SNAPplication</h2>
+            <div class="page-header text-center" style="margin-bottom:30px">
+                <h2 style="padding-bottom:20px">SNAP <i class="fa fa-bolt" style="color:yellow"></i> COACH</h2>
 
                 <!-- the links to our nested states using relative paths -->
                 <!-- add the active class if the state matches our ui-sref -->
@@ -18,15 +18,19 @@
                     <a ui-sref-active="active" ui-sref=".detail-res-citizens"><span>5</span> Details</a>
                     <a ui-sref-active="active" ui-sref=".income"><span>6</span> Income</a>
                 </div> -->
-                <div class="progress center" style="margin-left:30%; width:40%; height:15px;">
-                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:15%;">
-                        <span class="sr-only">15% Complete</span>
+
+                <!--<progressbar animate="false" value="progress" type="success"><b>{{progress | number:0}}%</b></progressbar>-->
+
+                <div class="progress center" style="margin-left:20%; margin-bottom:-40px; width:60%; height:15px;" ng-show="show_progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{ width: progress +'%'}">
+                        <span class="sr-only">{{ progress | number:0 }}% Complete</span>
                     </div>
                 </div>
+
             </div>
 
             <!-- use ng-submit to catch the form submission and use our Angular function -->
-            <form id="signup-form" ng-submit="processForm()" novalidate>
+            <form name="snapForm" id="signup-form" ng-submit="processForm()" novalidate>
 
                 <!-- our nested state views will be injected here -->
                 <div id="form-views" ui-view></div>
@@ -34,11 +38,13 @@
 
         </div>
 
-        <!-- show our formData as it is being typed
-	<pre>
-		{{ formData }}
-        {{ new_resident }}
-	</pre>-->
+
+	<!-- <pre>
+		{{ completed_first_name }}
+
+        {{ snapForm.$valid }}
+
+	</pre> -->
 
 
     </div>

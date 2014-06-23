@@ -1,0 +1,29 @@
+<div class="row ">
+    <span class="text-left" style="font-size: 30px"><strong>Your application is in!</strong></span>
+    <br/>
+</div>
+
+<div class="row">
+    <p>
+        Next, you'll get a phone call from the SNAP office by {{ date_of_interview | date:'EEEE, MMMM d' }}, to schedule your phone interview.
+    </p>
+</div>
+
+<div class="row">
+    <p>
+        Your phone interview should occur within 5 business days of today's filing date.
+    </p>
+    <br/>
+</div>
+
+<div class="form-group">
+    <label for="sms_reminders">
+        <input type="checkbox" id="sms_reminders" ng-model="sms_reminders"/> Check this if you'd like to get SMS reminders about your phone interview.
+    </label>
+</div>
+
+<div class="col-xs-12">
+    <a ui-sref="form.interview-information" class="btn btn-block btn-remove-ws" style="background-color: yellow;color:black">
+        <strong>Prepare for the interview</strong>
+    </a>
+</div>

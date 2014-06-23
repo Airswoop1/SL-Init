@@ -1,0 +1,21 @@
+<div class="row">
+    <span class="text-left" style="font-size: 30px"><strong>Thanks, {{ formData.name.first_name }}</strong></span>
+
+    <p >To complete your online application for SNAP, we need your full name and contact information.</p>
+</div>
+
+<div class="form-group" style="margin-left:-16px" ng-hide="completed_first_name">
+    <label for="first_name">FIRST NAME</label>
+    <input class="form-control" type="text" id="first_name" ng-model="formData.name.first_name"/>
+</div>
+
+<div class="form-group" style="margin-left:-16px">
+    <label for="last_name">LAST NAME</label>
+    <input class="form-control" type="text" id="last_name" ng-model="formData.name.last_name"/>
+</div>
+
+<div class="row">
+    <a ui-sref="form.address" class="btn btn-block" style="background-color:yellow;color:black">
+        <strong>Continue</strong>
+    </a>
+</div>

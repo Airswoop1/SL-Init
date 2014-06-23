@@ -21,6 +21,13 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         }
     })
 
+    .directive('snapInformation', function(){
+        return {
+            restrict:'E',
+            templateUrl:'process-info.html'
+        }
+    })
+
 // configuring our routes
 // =============================================================================
     .config(function($stateProvider, $urlRouterProvider) {
@@ -39,6 +46,10 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                 templateUrl: 'form-intro.html'
             })
 
+            .state('form.name', {
+                url: '/name',
+                templateUrl:'form-name.html'
+            })
 
             .state('form.recert', {
                 url: '/recert',
@@ -48,6 +59,11 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
             .state('form.basic-info', {
                 url: '/basic-info',
                 templateUrl: 'form-basic-info.html'
+            })
+
+            .state('form.telephone', {
+                url: '/telephone',
+                templateUrl: 'form-telephone.html'
             })
 
 
@@ -60,6 +76,17 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
             .state('form.basic-confirmation', {
                 url: '/basic-confirmation',
                 templateUrl: 'form-basic-confirmation.html'
+            })
+
+            .state('form.basic-app-submitted', {
+                url: '/app-submitted',
+                templateUrl: 'basic-app-submitted.html'
+            })
+
+
+            .state('form.interview-information', {
+                url:'/interview-information',
+                templateUrl:'form-interview-information.html'
             })
 
             .state('form.mailing-address',{
@@ -103,12 +130,12 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
 
         // catch all route
         // send users to the form page
-        $urlRouterProvider.otherwise('/form/basic-info');
+        $urlRouterProvider.otherwise('/form/intro');
     })
 
 // our controller for the form
 // =============================================================================
-    .controller('formController', function($scope, $state, $http) {
+    .controller('formController', function($scope, $state, $http, $rootScope) {
 
         // we will store all of our form data in this object
         $scope.formData = {
@@ -125,13 +152,64 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         $scope.new_income = {
             frequency: "Bi-weekly"
         };
+        $scope.init_name = "";
+        $scope.progress = 0;
+        $scope.date = new Date();
+        $scope.date_of_interview = new Date();
+        $scope.date_of_interview.setDate($scope.date.getDate() + 10);
 
 
         //data flags for optional fields
         $scope.alt_phone = false;
         $scope.resident_non_citizen = false;
         $scope.basic_confirmation_agree = false;
+        $scope.has_phone = false;
+        $scope.completed_first_name = false;
 
+
+
+
+        if($state.current.name == 'form.intro'){
+            $scope.show_progress = false;
+        }
+        else{
+            $scope.show_progress = true;
+        }
+
+
+        $scope.initNameStart = function(){
+            this.formData.name.full_name = this.init_name;
+
+            var split_name = this.init_name.split(' ');
+
+            this.formData.name.first_name = split_name[0];
+
+            if(split_name.length == 1) {
+                $scope.completed_first_name = true;
+                $state.go('form.name');
+            }
+            else if(split_name.length == 2) {
+                this.formData.name.last_name = split_name[1];
+                $state.go('form.address');
+            }
+            else if(split_name.length >= 3) {
+                this.formData.name.middle_name = split_name[1];
+                this.formData.name.last_name = split_name[2];
+                $state.go('form.address');
+            }
+            else {
+                $state.go('form.name');
+            }
+
+
+        }
+
+        $scope.submitBasicApp = function() {
+            $scope.basic_confirmation_agree = true;
+            this.processBasicForm();
+            //process form here
+            $state.go('form.basic-app-submitted');
+        }
 
         $scope.addIncome = function(next){
             if(this.new_income.hasOwnProperty('amount')){
@@ -176,7 +254,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         $scope.processBasicForm = function() {
             alert('processing form');
             console.log($http.defaults.headers.post);
-            $http.post('http://snapcoach.azurewebsites.net/create_base_pdf', JSON.stringify($scope.formData))
+            $http.post('http://ec2-54-213-211-187.us-west-2.compute.amazonaws.com/create_base_pdf', JSON.stringify($scope.formData))
                 .success(function(data, status, headers, config) {
 
                     alert("successfully received success callback");
@@ -185,7 +263,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                     console.log(headers);
                     console.log(config);
 
-                    $state.go('form.personal-info');
                 })
                 .error(function(data, status, headers, config) {
 
@@ -198,5 +275,65 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                 });
         };
 
+        $rootScope.$on('$stateChangeStart', function(event, toState){
+            if(toState.name == 'form.intro' || toState.name == 'form.interview-information') {
+                $scope.show_progress = false
+            }
+            else {
+                if($scope.show_progress == false){
+                    $scope.show_progress = true;
+                }
+            }
+
+            if($scope.progress < 100){
+                $scope.progress += 20;
+            }
+
+        })
+
     })
 
+    .filter('tel', function () {
+        return function (tel) {
+            if (!tel) { return ''; }
+
+            var value = tel.toString().trim().replace(/^\+/, '');
+
+            if (value.match(/[^0-9]/)) {
+                return tel;
+            }
+
+            var country, city, number;
+
+            switch (value.length) {
+                case 10: // +1PPP####### -> C (PPP) ###-####
+                    country = 1;
+                    city = value.slice(0, 3);
+                    number = value.slice(3);
+                    break;
+
+                case 11: // +CPPP####### -> CCC (PP) ###-####
+                    country = value[0];
+                    city = value.slice(1, 4);
+                    number = value.slice(4);
+                    break;
+
+                case 12: // +CCCPP####### -> CCC (PP) ###-####
+                    country = value.slice(0, 3);
+                    city = value.slice(3, 5);
+                    number = value.slice(5);
+                    break;
+
+                default:
+                    return tel;
+            }
+
+            if (country == 1) {
+                country = "";
+            }
+
+            number = number.slice(0, 3) + '-' + number.slice(3);
+
+            return (country + " (" + city + ") " + number).trim();
+        };
+    });
