@@ -3,6 +3,8 @@ console.log("Initializing... ");
 var express = require("express");
 var http = require("http");
 var path = require("path");
+var os = require("os");
+
 var api = require("./api/api.js");
 var cors = require("cors");
 
@@ -19,14 +21,12 @@ app.use(express.logger('dev'));
 app.use(express.urlencoded());
 app.use(express.bodyParser());
 app.use(express.cookieParser('asdfa9asdfxxc0'));
-app.use(express.session());
-//app.use(express.json());
-//app.use(express.urlencoded());
-//app.use(express.methodOverride());
+
+
 app.use(cors())
 app.use(app.router);
 app.use(express.static('public'));
-//app.use(express.multipart());
+
 app.set('views', path.join(__dirname, 'views'));
 
 
@@ -35,5 +35,6 @@ api.set_routes(app);
 
 server.listen(app.get('port'), function () {
     console.log('listening on port ' + app.get('port') + " started:  ");
+    console.log('Url: ' + os.hostname())
     console.log("Completed Node initialization: " + new Date());
 });

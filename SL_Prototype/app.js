@@ -28,6 +28,14 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
         }
     })
 
+    .directive('requiredDocuments', function(){
+
+        return {
+            restrict:'E',
+            templateUrl:'required-documents.html'
+        }
+    })
+
 // configuring our routes
 // =============================================================================
     .config(function($stateProvider, $urlRouterProvider) {
@@ -252,12 +260,10 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
 
         // function to process the form
         $scope.processBasicForm = function() {
-            alert('processing form');
             console.log($http.defaults.headers.post);
             $http.post('http://ec2-54-213-211-187.us-west-2.compute.amazonaws.com/create_base_pdf', JSON.stringify($scope.formData))
                 .success(function(data, status, headers, config) {
 
-                    alert("successfully received success callback");
                     console.log(status);
                     console.log(data);
                     console.log(headers);
@@ -266,7 +272,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                 })
                 .error(function(data, status, headers, config) {
 
-                    alert("successfully received error callback");
                     console.log(status);
                     console.log(data);
                     console.log(headers);
