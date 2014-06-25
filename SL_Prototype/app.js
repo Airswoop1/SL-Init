@@ -4,7 +4,7 @@
 // app.js
 // create our angular app and inject ngAnimate and ui-router
 // =============================================================================
-angular.module('formApp', ['ngAnimate', 'ui.router'])
+angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
 
     .directive('selectRace', function(){
         return {
@@ -135,6 +135,11 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                 templateUrl:'form-income.html'
             })
 
+            .state('form.upload',{
+                url:'/upload',
+                templateUrl:'upload-test.html'
+            })
+
 
         // catch all route
         // send users to the form page
@@ -143,7 +148,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
 
 // our controller for the form
 // =============================================================================
-    .controller('formController', function($scope, $state, $http, $rootScope) {
+    .controller('formController', function($scope, $state, $http, $rootScope, $upload) {
 
         // we will store all of our form data in this object
         $scope.formData = {
@@ -278,6 +283,34 @@ angular.module('formApp', ['ngAnimate', 'ui.router'])
                     console.log(config);
 
                 });
+
+
+        };
+
+
+        $scope.onFileSelect = function($files) {
+            //$files: an array of files selected, each file has name, size, and type.
+            for (var i = 0; i < $files.length; i++) {
+                var file = $files[i];
+                $scope.upload = $upload.upload({
+                    url: 'http://localhost:1337/upload_docs',
+
+                    data: {myObj: $scope.myModelObj, "the_data":"oohhh zee data"},
+                    file: file
+
+                    /* set the file formData name ('Content-Desposition'). Default is 'file' */
+                    //fileFormDataName: myFile, //or a list of names for multiple files (html5).
+                    /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
+                    //formDataAppender: function(formData, key, val){}
+                }).progress(function(evt) {
+                        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                    }).success(function(data, status, headers, config) {
+                        // file is uploaded successfully
+                        console.log(data);
+                    });
+
+            }
+
         };
 
         $rootScope.$on('$stateChangeStart', function(event, toState){
