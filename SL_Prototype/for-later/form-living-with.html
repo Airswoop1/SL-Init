@@ -1,0 +1,139 @@
+<!-- form-living-with.html -->
+<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Middle Initial</th>
+                <th>Last Name</th>
+                <th>Social Security #</th>
+                <th>Date of Birth</th>
+                <th>Martial Status</th>
+                <th>Gender</th>
+                <th>Applying</th>
+                <th>Relationship to You</th>
+                <th>Buy and Prepare Food WIth</th>
+                <th>Hispanic or Latino</th>
+                <th>Race</th>
+            </tr>
+        </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>{{formData.name.first_name}}</td>
+            <td>{{formData.name.middle_name[0]}}</td>
+            <td>{{formData.name.last_name}}</td>
+            <td>{{formData.SSN}}</td>
+            <td>{{formData.DOB}}</td>
+            <td>{{formData.marital_status}}</td>
+            <td>{{formData.gender}}</td>
+            <td>Yes</td>
+            <td>SELF</td>
+            <td>Yes</td>
+            <td>{{formData.hispanic}}</td>
+            <td>{{formData.race}}</td>
+        </tr>
+        <tr ng-repeat="person in formData.other_residents">
+            <td></td>
+            <td>{{person.name.first_name}}</td>
+            <td>{{person.name.middle_name[0]}}</td>
+            <td>{{person.name.last_name}}</td>
+            <td>{{person.SSN}}</td>
+            <td>{{person.DOB}}</td>
+            <td>{{person.marital_status}}</td>
+            <td>{{person.gender}}</td>
+            <td>{{person.applying}}</td>
+            <td>{{person.relationship}}</td>
+            <td>{{person.buy_food}}</td>
+            <td>{{person.hispanic}}</td>
+            <td>{{person.race}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<div class="form-group col-lg-4">
+    <label for="first_name">First Name</label>
+    <input type="text" class="form-control" name="first_name" ng-model="new_resident.name.first_name" required>
+</div>
+
+<div class="form-group col-lg-4">
+    <label for="middle_name">Middle Name</label>
+    <input type="text" class="form-control" name="middle_name" ng-model="new_resident.name.middle_name">
+</div>
+
+<div class="form-group col-lg-4">
+    <label for="last_name">Last Name</label>
+    <input type="text" class="form-control" name="last_name" ng-model="new_resident.name.last_name" required>
+</div>
+
+
+<div class="form-group col-lg-4">
+    <label for="SSN">Social Security Number</label>
+    <input type="text" class="form-control" name="SSN" ng-model="new_resident.SSN">
+</div>
+
+<div class="form-group col-lg-4">
+    <label for="DOB">Date of Birth</label>
+    <input type="date" class="form-control" name="DOB" ng-model="new_resident.DOB">
+</div>
+
+<div class="form-group">
+    <label>Marital Status</label>
+    <div>
+        <label class="radio-inline">
+            <input type="radio" name="marital_status" value="Single" ng-model="new_resident.marital_status">Single
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="marital_status" value="Married" ng-model="new_resident.marital_status">Married
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="marital_status" value="Divorced" ng-model="new_resident.marital_status">Divorced
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="marital_status" value="Widowed" ng-model="new_resident.marital_status">Widowed
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Gender</label>
+    <div>
+        <label class="radio-inline">
+            <input type="radio" name="gender" value="Male" ng-model="new_resident.gender">Male
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="gender" value="Female" ng-model="new_resident.gender">Female
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="gender" value="Other" ng-model="new_resident.gender">Other
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Hispanic or Latino?</label>
+    <div>
+        <label class="radio-inline">
+            <input type="radio" name="hispanic" value="Yes" ng-model="new_resident.hispanic"> Yes
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="hispanic" value="No" ng-model="new_resident.hispanic"> No
+        </label>
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-xs-3 col-xs-offset-1">
+        <a data-ng-click="addResident()" class="btn btn-block btn-info btn-remove-ws">
+            Add Another Resident
+        </a>
+    </div>
+    <div class="col-xs-6">
+        <a ui-sref="form.living-with" class="btn btn-block btn-info">
+            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </a>
+    </div>
+</div>

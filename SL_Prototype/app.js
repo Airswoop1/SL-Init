@@ -4,7 +4,7 @@
 // app.js
 // create our angular app and inject ngAnimate and ui-router
 // =============================================================================
-angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
+var app = angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router', 'DocumentUploader' ])
 
     .directive('selectRace', function(){
         return {
@@ -59,26 +59,14 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
                 templateUrl:'form-name.html'
             })
 
-            .state('form.recert', {
-                url: '/recert',
-                templateUrl: 'form-recert.html'
-            })
-
-            .state('form.basic-info', {
-                url: '/basic-info',
-                templateUrl: 'form-basic-info.html'
+            .state('form.address', {
+                url: '/address',
+                templateUrl: 'form-address.html'
             })
 
             .state('form.telephone', {
                 url: '/telephone',
                 templateUrl: 'form-telephone.html'
-            })
-
-
-            // url will be /form/address
-            .state('form.address', {
-                url: '/address',
-                templateUrl: 'form-address.html'
             })
 
             .state('form.basic-confirmation', {
@@ -97,43 +85,6 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
                 templateUrl:'form-interview-information.html'
             })
 
-            .state('form.mailing-address',{
-                url: '/mailing-address',
-                templateUrl: 'form-mailing-address.html'
-
-            })
-
-            .state('form.personal-info',{
-                url: '/personal-info',
-                templateUrl: 'form-personal-info.html'
-
-            })
-
-            .state('form.living-with',{
-                url: '/living-with',
-                templateUrl: 'form-living-with.html'
-
-            })
-
-            .state('form.detail-res-citizens',{
-                url: '/detail-res-citizens',
-                templateUrl: 'detail-res-citizens2.html'
-            })
-
-            .state('form.detail-harbor-felon',{
-                url: '/detail-harbor-felon',
-                templateUrl: 'detail-harbor-felon.html'
-            })
-
-            .state('form.detail-group-living-with',{
-                url: '/detail-group-living-with',
-                templateUrl: 'detail-group-living-with.html'
-            })
-
-            .state('form.income',{
-                url:'/income',
-                templateUrl:'form-income.html'
-            })
 
             .state('form.upload',{
                 url:'/upload',
@@ -148,23 +99,14 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
 
 // our controller for the form
 // =============================================================================
-    .controller('formController', function($scope, $state, $http, $rootScope, $upload) {
+    .controller('formController', function($scope, $state, $http, $rootScope, $upload, documentUpload, InfoUploader) {
 
         // we will store all of our form data in this object
         $scope.formData = {
-            lw_disabled:"false",
-            lw_vet:"false",
-            name: {},
-            other_residents: [],
-            res_non_citizens : [],
-            income_sources : []
+            name: {}
         };
 
         //data objects for holding input temporarily
-        $scope.new_resident = {};
-        $scope.new_income = {
-            frequency: "Bi-weekly"
-        };
         $scope.init_name = "";
         $scope.progress = 0;
         $scope.date = new Date();
@@ -173,14 +115,18 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
 
 
         //data flags for optional fields
-        $scope.alt_phone = false;
-        $scope.resident_non_citizen = false;
         $scope.basic_confirmation_agree = false;
         $scope.has_phone = false;
+        $scope.has_address = false;
         $scope.completed_first_name = false;
+        $scope.submitted_basic_information = false;
 
-
-
+        $scope.completed_items = {
+            "name": false,
+            "address": false,
+            "telephone" : false,
+            "confirmation" : false
+        }
 
         if($state.current.name == 'form.intro'){
             $scope.show_progress = false;
@@ -191,11 +137,13 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
 
 
         $scope.initNameStart = function(){
-            this.formData.name.full_name = this.init_name;
+            $scope.formData.name.full_name = this.init_name;
 
             var split_name = this.init_name.split(' ');
+            alert(split_name);
+            alert(split_name.length);
 
-            this.formData.name.first_name = split_name[0];
+            $scope.formData.name.first_name = split_name[0];
 
             if(split_name.length == 1) {
                 $scope.completed_first_name = true;
@@ -219,117 +167,112 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
 
         $scope.submitBasicApp = function() {
             $scope.basic_confirmation_agree = true;
-            this.processBasicForm();
-            //process form here
+            $scope.submitted_basic_information = true;
+
+            InfoUploader.uploadBasicInfo($scope.formData);
+
             $state.go('form.basic-app-submitted');
         }
 
-        $scope.addIncome = function(next){
-            if(this.new_income.hasOwnProperty('amount')){
-                this.formData.income_sources.push(this.new_income);
-                this.new_income = {
-                    frequency: "Bi-weekly"
-                };
-            }
 
-            if(next){
-                $state.go('form.personal-info');
-            }
-            return true;
-        }
-
-        $scope.addResident = function() {
-            this.formData.other_residents.push(this.new_resident); //add user to other_residents
-            this.new_resident = {}; //clear form data
-
-        }
-
-        $scope.nonCitizens = function() {
-            this.resident_non_citizen = true;
-        }
-
-
-        $scope.completedBasicInfo = function() {
-            if(this.formData.name.first_name && this.formData.name.last_name) {
+        $scope.completedName = function(first_name, last_name) {
+            if(first_name && last_name) {
+                updateProgress('name');
                 $state.go('form.address');
             }
             else {
-             this.throwErrors('form.basic-info')
+                this.throwErrors('form.name');
             }
         }
 
+        $scope.completedAddress = function(has_address, zip, address){
 
-        $scope.throwErrors = function(page) {
-            alert('you must fill out all required fields!');
+            if(!has_address && zip && (zip.toString().length==5) && address){
+                updateProgress('address');
+                $state.go('form.telephone');
+            }
+            else if(has_address){
+                $state.go('form.telephone');
+
+            }
+            else{
+                this.throwErrors('form.address');
+            }
         }
 
-        // function to process the form
-        $scope.processBasicForm = function() {
-            console.log($http.defaults.headers.post);
-            $http.post('http://ec2-54-213-211-187.us-west-2.compute.amazonaws.com/create_base_pdf', JSON.stringify($scope.formData))
-                .success(function(data, status, headers, config) {
+        $scope.completedTelephone = function(){
+            //phone validation?
+            updateProgress('telephone');
+            $state.go('form.basic-confirmation');
+        }
 
-                    console.log(status);
-                    console.log(data);
-                    console.log(headers);
-                    console.log(config);
-
-                })
-                .error(function(data, status, headers, config) {
-
-                    console.log(status);
-                    console.log(data);
-                    console.log(headers);
-                    console.log(config);
-
-                });
-
-
-        };
-
-
-        $scope.onFileSelect = function($files) {
-            //$files: an array of files selected, each file has name, size, and type.
-            for (var i = 0; i < $files.length; i++) {
-                var file = $files[i];
-                $scope.upload = $upload.upload({
-                    url: 'http://localhost:1337/upload_docs',
-
-                    data: {myObj: $scope.myModelObj, "the_data":"oohhh zee data"},
-                    file: file
-
-                    /* set the file formData name ('Content-Desposition'). Default is 'file' */
-                    //fileFormDataName: myFile, //or a list of names for multiple files (html5).
-                    /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
-                    //formDataAppender: function(formData, key, val){}
-                }).progress(function(evt) {
-                        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-                    }).success(function(data, status, headers, config) {
-                        // file is uploaded successfully
-                        console.log(data);
-                    });
-
-            }
-
-        };
-
-        $rootScope.$on('$stateChangeStart', function(event, toState){
-            if(toState.name == 'form.intro' || toState.name == 'form.interview-information') {
-                $scope.show_progress = false
-            }
-            else {
-                if($scope.show_progress == false){
-                    $scope.show_progress = true;
+        function updateProgress(u){
+            $scope.completed_items[u] = true;
+            for(var comp in $scope.completed_items){
+                if($scope.completed_items[comp]==true){
+                    $scope.progress += 20;
                 }
             }
+        }
 
-            if($scope.progress < 100){
-                $scope.progress += 20;
+        $scope.throwErrors = function(page) {
+            if(page == 'form.name') {
+                alert('you must fill out all required fields!');
+            }
+            else if(page == 'form.address') {
+                alert('Please fill in address and zip!');
+            }
+
+        }
+
+
+        $scope.uploadFiles = function($files) {
+            var file_upload_status = documentUpload.onFileSelect($files, $scope);
+            file_upload_status.then(function(success){
+                alert('success!');
+                console.log(success);
+            })
+        }
+
+        $rootScope.$on('$stateChangeStart', function(event, toState){
+            if((toState.name == 'form.name' || toState.name == 'form.address' ||
+                toState.name == 'form.telephone' || toState.name == 'form.basic-confirmation')) {
+                $scope.show_progress = true
+            }
+            else {
+                if($scope.show_progress == true){
+                    $scope.show_progress = false;
+                }
             }
 
         })
 
     })
+
+    .factory('InfoUploader', function($http) {
+        return {
+            uploadBasicInfo : function(formData) {
+                $http.post('https://54.213.211.187/create_base_pdf', JSON.stringify(formData))
+                    .success(function(data, status, headers, config) {
+                        alert("success uploading info!");
+                        console.log(status);
+                        console.log(data);
+                        console.log(headers);
+                        console.log(config);
+
+                    })
+                    .error(function(data, status, headers, config) {
+                        alert('error uploading info');
+                        console.log(status);
+                        console.log(data);
+                        console.log(headers);
+                        console.log(config);
+
+                    });
+            }
+        }
+    })
+
 
     .filter('tel', function () {
         return function (tel) {
@@ -375,3 +318,4 @@ angular.module('formApp', ['angularFileUpload', 'ngAnimate', 'ui.router' ])
             return (country + " (" + city + ") " + number).trim();
         };
     });
+

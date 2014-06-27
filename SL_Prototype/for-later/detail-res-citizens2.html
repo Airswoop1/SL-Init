@@ -1,0 +1,31 @@
+<!-- form.detail-res-citizens.html -->
+<div>
+    <p>Are you and is everyone living with you a US citizen?</p>
+</div>
+
+<div class="form-group" ng-show="resident_non_citizen">
+    <label for="res-non-citizens">Who?</label>
+
+    <div ng-repeat="person in formData.other_residents">
+        <label class="checkbox-inline">{{ person.name.first_name + " " + person.name.last_name }}<input type="checkbox" class="checkbox" /></label>
+    </div>
+
+</div>
+<br/>
+<div class="form-group row">
+    <div class="col-xs-6" ng-hide="resident_non_citizen">
+        <a ui-sref="form.detail-harbor-felon" class="btn btn-block btn-success">
+            YES
+        </a>
+    </div>
+    <div class="col-xs-6" ng-hide="resident_non_citizen">
+        <a  data-ng-click="nonCitizens()" class="btn btn-block btn-danger">
+            NO
+        </a>
+    </div>
+    <div class="col-xs-6 col-xs-offset-3" ng-show="resident_non_citizen">
+        <a  us-sref="form.basic-info" class="btn btn-block btn-info">
+            Continue
+        </a>
+    </div>
+</div>

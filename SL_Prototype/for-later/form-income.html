@@ -1,0 +1,97 @@
+<div>
+    <p>List ALL your income and the income of anyone living with you. This includes, but is not limited to wages, income from self-employment
+        (for example: babysitting, cleaning, income from a roomer or boarder) child support, pensions, veterans benefits, disability, social
+        security or SSI, grant for scholarships for rent or food, Temporary Assistance, and income from friends or relatives.
+    </p>
+</div>
+
+<div ng-show="formData.income_sources.length" style="border-bottom: 1px dimgray solid;margin-bottom:10px">
+    <div class="row" style="border: 1px gray solid;">
+        <div class="col-xs-3">
+            Name
+        </div>
+        <div class="col-xs-3">
+            Source
+        </div>
+        <div class="col-xs-1">
+            Hours
+        </div>
+        <div class="col-xs-2">
+            Frequency
+        </div>
+        <div class="col-xs-3">
+            Gross Amount
+        </div>
+    </div>
+
+    <div class="row" ng-repeat="i in formData.income_sources">
+        <div class="col-xs-3">
+            {{ i.name }}
+        </div>
+        <div class="col-xs-3">
+            {{ i.source }}
+        </div>
+        <div class="col-xs-1">
+            {{ i.hours }}
+        </div>
+        <div class="col-xs-2">
+            {{ i.frequency }}
+        </div>
+        <div class="col-xs-3">
+            {{ i.amount | currency}}
+        </div>
+    </div>
+</div>
+<div class="divider"></div>
+
+<div class="form-group">
+    <label for="income_source_name">Name of Person Receiving Income</label>
+    <select name="income_source_name" id="income_source_name" class="form-control" ng-model="new_income.name">
+        <option value="{{ formData.name.first_name + ' ' + formData.name.last_name }}">
+            {{ formData.name.first_name + ' ' + formData.name.last_name }}
+        </option>
+        <option ng-repeat="person in formData.other_residents" value="{{ person.name.first_name + ' ' + person.name.last_name }}">
+            {{ person.name.first_name + ' ' + person.name.last_name }}
+        </option>
+    </select>
+</div>
+        
+<div class="form-group">
+    <label for="income_source">Source of Income</label>
+    <input type="text" name="income_source" ng-model="new_income.source" class="form-control"/>
+</div>
+        
+<div class="form-group">
+    <label for="hours_worked">Hours Worked Per Month</label>
+    <input type="number" name="hours_worked" ng-model="new_income.hours" class="form-control"/>
+</div>
+
+<div class="form-group">
+    <label for="income_frequency">How Often is it Received?</label>
+    <select name="income_frequency" class="form-control" ng-model="new_income.frequency">
+        <option>Bi-weekly</option>
+        <option>Every Week</option>
+        <option>Monthly</option>
+        <option>Daily</option>
+        <option>Other</option>
+    </select>
+</div>
+        
+<div class="form-group">
+    <label for="gross_amount">Gross Amount Received Before Deductions</label>
+    <input type="number" id="gross_amount" class="form-control" ng-model="new_income.amount"/>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-xs-5 col-xs-offset-1">
+        <a data-ng-click="addIncome(false)" class="btn btn-block btn-warning btn-remove-ws">
+            Add another form of Income
+        </a>
+    </div>
+    <div class="col-xs-6">
+        <a data-ng-click="addIncome(true)" class="btn btn-block btn-info">
+            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </a>
+    </div>
+</div>

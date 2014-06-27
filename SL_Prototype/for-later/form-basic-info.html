@@ -1,0 +1,31 @@
+<!-- form-profile.html -->
+<div class="form-group col-lg-6">
+    <label for="first_name">First Name</label>
+    <input type="text" class="form-control" name="first_name" ng-model="formData.name.first_name" required>
+</div>
+
+<div class="form-group col-lg-6">
+    <label for="last_name">Last Name</label>
+    <input type="text" class="form-control" name="last_name" ng-model="formData.name.last_name" required>
+</div>
+
+<div class="form-group col-lg-6">
+    <label for="phone_main">Telephone Number</label>
+    <input type="text" class="form-control" name="phone_main" ng-model="formData.phone_main" required>
+    <input type="checkbox" ng-model="alt_phone"/> Do you have an alternate phone number you can be reached at?
+    <span class="glyphicon glyphicon-question-sign" ></span>
+</div>
+
+        
+<div class="form-group col-lg-6" ng-show="alt_phone">
+    <label for="phone_alt">Alternate Telephone Number</label>
+    <input type="text" class="form-control" name="phone_alt" ng-model="formData.phone_alt">
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-6 col-xs-offset-3">
+        <a data-ng-click="" class="btn btn-block btn-info">
+            Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </a>
+    </div>
+</div>
